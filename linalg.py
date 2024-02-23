@@ -72,11 +72,9 @@ def svd(M):
         s: numpy array of shape (k).
         v: numpy array of shape (n, n).
     """
-    u = None
-    s = None
-    v = None
+    
     ### VOTRE CODE ICI - DEBUT
-    pass
+    u, s, v = np.linalg.svd(M, full_matrices=False)
     ### VOTRE CODE ICI - FIN
 
     return u, s, v
@@ -95,9 +93,9 @@ def get_singular_values(M, k):
     Returns:
         singular_values: array of shape (k)
     """
-    singular_values = None
     ### VOTRE CODE ICI - DEBUT
-    pass
+    u, s, v = svd(M)
+    singular_values = s[:k]
     ### VOTRE CODE ICI - FIN
     return singular_values
 
@@ -114,10 +112,9 @@ def eigen_decomp(M):
         w: numpy array of shape (1, m) such that the column v[:,i] is the eigenvector corresponding to the eigenvalue w[i].
         v: Matrix where every column is an eigenvector.
     """
-    w = None
-    v = None
+    
     ### VOTRE CODE ICI - DEBUT
-    pass
+    w, v = np.linalg.eig(M)
     ### VOTRE CODE ICI - FIN
     return w, v
 
@@ -139,10 +136,16 @@ def get_eigen_values_and_vectors(M, k):
         eigenvectors: list of length k containing the top k eigenvectors
             of shape (m,)
     """
-    eigenvalues = []
-    eigenvectors = []
     ### VOTRE CODE ICI - DEBUT
-    pass
+    w, v = eigen_decomp(M)
+   
+    indices_triés = np.argsort(w)[::-1]
+    top_indices = indices_triés[:k]
+
+    eigenvalues = w[top_indices]
+    eigenvectors = v[:, top_indices]
+
+
     ### VOTRE CODE ICI - FIN
     return eigenvalues, eigenvectors
 
@@ -155,6 +158,12 @@ a = np.array([[1, 1, 0]])
 b = np.array([[-1],
             [2],
             [5]])
+
+N = np.array([[1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9]]) 
+
+
 ### VOTRE CODE ICI - FIN
 
 
@@ -180,3 +189,40 @@ print(ans)
 print()
 print("dimension : ", ans.shape)
 
+
+M_2 = np.array(range(4)).reshape((2,2))
+a_2 = np.array([[1,1]])
+b_2 = np.array([[10, 10]]).T
+
+# La réponse retournée doit être $[[20], [100]]$ de dimension (2, 1).
+ans = complicated_matrix_function(M_2, a_2, b_2)
+print(ans)
+print()
+print("dimension : ", ans.shape)
+
+only_first_singular_value = get_singular_values(M, 1)
+print(only_first_singular_value)
+
+
+# Maintenant, Récupérons les deux premières valeurs singulières.
+# Notez que la première valeur singulière est beaucoup plus grande que la seconde.
+first_two_singular_values = get_singular_values(M, 2)
+print(first_two_singular_values)
+
+# Assurons-nous que la première valeur singulière dans les deux appels est la même.
+assert only_first_singular_value[0] == first_two_singular_values[0]
+
+val, vec = get_eigen_values_and_vectors(N, 1)
+print("Première valeur propre = ", val)
+print()
+print("Premier vecteur propre = \n", vec)
+print()
+assert len(val) == 1
+
+# Maintenant, récupérons les deux premières valeurs propres et vecteurs propres.
+# Votre résultat doit retourner une liste de deux valeurs propres et une liste de deux tableaux (deux vecteurs propres).
+val, vec = get_eigen_values_and_vectors(N, 2)
+print("Valeurs propres = ", val)
+print()
+print("Vecteurs propres = \n", vec)
+assert len(val) == 2
