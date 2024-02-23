@@ -3,6 +3,8 @@ import numpy as np
 import random 
 import matplotlib.pyplot as plt
 from imageManip import *
+from linalg import *
+
 
 
 plt.rcParams['figure.figsize'] = (10.0, 8.0) # fixer les dimensions par défaut des figures
@@ -46,9 +48,11 @@ def complicated_matrix_function(M, a, b):
     Returns:
         out: numpy matrix of shape (x, 1).
     """
-    out = None
+    
     ### VOTRE CODE ICI - DEBUT
-    pass
+    out1 = np.dot(b.T, a.T)
+    out2 = np.dot(M, a.T)
+    out = out1* out2
     ### VOTRE CODE ICI - FIN
 
     return out
@@ -169,3 +173,10 @@ aDotB = dot_product(a, b)
 print(aDotB)
 
 print("dimension : ", aDotB.shape)
+
+
+ans = complicated_matrix_function(M, a, b)
+print(ans)
+print()
+print("dimension : ", ans.shape)
+
